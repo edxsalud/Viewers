@@ -2,6 +2,9 @@ import { Session } from 'meteor/session';
 import { Random } from 'meteor/random';
 import { OHIF } from 'meteor/ohif:core';
 import { cornerstone, cornerstoneTools } from 'meteor/ohif:cornerstone';
+import { getFrameOfReferenceUID } from './getFrameOfReferenceUID';
+import { updateCrosshairsSynchronizer } from './updateCrosshairsSynchronizer';
+import { crosshairsSynchronizers } from './crosshairsSynchronizers';
 
 let activeTool;
 let tools = {};
@@ -56,7 +59,8 @@ export const toolManager = {
             wwwcRegion: 'WwwcRegionTool',
             zoomTouchPinch: 'ZoomTouchPinchTool',
             panMultiTouch: 'PanMultiTouchTool',
-            stackScrollMouseWheel: 'StackScrollMouseWheelTool'
+            stackScrollMouseWheel: 'StackScrollMouseWheelTool',
+            referenceLines: 'ReferenceLinesTool'
         };
 
         const { textStyle, toolStyle, toolColors } = cornerstoneTools;
@@ -166,25 +170,40 @@ export const toolManager = {
                 break;
         }
 
-        cornerstoneTools.setToolActive(toolName, options);
+        if (toolName === 'crosshairs') {
+            // Activate crosshairs tool with the synchronizers by element
+            cornerstoneTools.store.state.enabledElements.forEach(element => {
+                const currentFrameOfReferenceUID = getFrameOfReferenceUID(element);
+                if (currentFrameOfReferenceUID) {
+                    updateCrosshairsSynchronizer(currentFrameOfReferenceUID);
+                    options.synchronizationContext = crosshairsSynchronizers.synchronizers[currentFrameOfReferenceUID];
+                }
+                cornerstoneTools.setToolActiveForElement(element, toolName, options);
+            });
+        } else {
+            cornerstoneTools.setToolActive(toolName, options);
+        }
+
         activeTool[button] = toolName;
 
         // Enable reactivity
         Session.set('ToolManagerActiveToolUpdated', Random.id());
     },
 
-    instantiateTools() {
-        // Instantiate all cornerstone tools for all enabled elements
+    instantiateTools(element) {
+        // Instantiate all cornerstone tools for the given element
         Object.keys(tools).forEach(toolName => {
             const apiTool = cornerstoneTools[tools[toolName]];
             if (apiTool) {
-                cornerstoneTools.addTool(apiTool, {
+                cornerstoneTools.addToolForElement(element, apiTool, {
                     name: toolName,
                     configuration: defaultToolConfig
                 });
 
-                // Set all tools passive by default in order to render the external data if exists
-                cornerstoneTools.setToolPassive(toolName);
+                // Set all tools (except the active tools) passive by default in order to render the external data if exists
+                if (!activeTool || !Object.values(activeTool).includes(toolName)) {
+                    cornerstoneTools.setToolPassive(toolName);
+                }
             }
         });
 
