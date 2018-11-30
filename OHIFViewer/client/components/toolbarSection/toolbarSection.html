@@ -1,6 +1,29 @@
 <template name="toolbarSection">
     <div class="toolbarSection noselect p-x-2">
         <div class="clearfix">
+            <div class="pull-left rp-x-1 m-t-1" style="margin-right: 13px;cursor: pointer;">
+              <!--<img src="/images/logo_eDx.svg">-->
+              {{#header }}
+                  {{#section 'brand'}}
+                      <svg class="logo-image">
+                          <use xlink:href={{absoluteUrl "packages/ohif_viewerbase/assets/icons.svg#icon-ohif-logo"}}></use>
+                      </svg>
+                      <div class="logo-text">Open Health Imaging Foundation</div>
+                  {{/section}}
+              {{/header}}
+            </div>
+
+            <div class="pull-left rp-x-1 m-t-1 roundedButton Menubtn" style="margin-top: 6px !important;">
+                <img class="show_tools" src="/images/show_tools.png" style="cursor: pointer"  onmouseover="this.src='/images/tools_hover.png'">
+                <div class="tools_txt" style="color: #20a5d6;
+                                      cursor: pointer;
+                                      font-size: 12px;
+                                      font-weight: 500;
+                                      line-height: 12px;
+                                      margin-top: 4px;
+                                      box-sizing: border-box;
+                                      text-align: center;">Tools</div>
+            </div>
             <div class="pull-left m-t-1">
                 {{>roundedButtonGroup leftSidebarToggleButtonData}}
             </div>

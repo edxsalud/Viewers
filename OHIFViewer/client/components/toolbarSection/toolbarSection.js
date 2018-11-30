@@ -59,7 +59,7 @@ Template.toolbarSection.helpers({
         //         bottomLabel: 'Hanging'
         //     }]
         // };
-        
+
         return {
             toggleable: true,
             key: 'rightSidebar',
@@ -303,20 +303,54 @@ Template.toolbarSection.onRendered(function() {
         OHIF.viewerbase.viewportUtils.toggleCineDialog();
     }
 
-    // TODO: Figure out a way to disable/enable the buttons with each status from New API
-    // // Set disabled/enabled tool buttons that are set in toolManager
-    // const states = OHIF.viewerbase.toolManager.getToolDefaultStates();
-    // const disabledToolButtons = states.disabledToolButtons;
-    // const allToolbarButtons = $('#toolbar').find('button');
-    // if (disabledToolButtons && disabledToolButtons.length > 0) {
-    //     for (let i = 0; i < allToolbarButtons.length; i++) {
-    //         const toolbarButton = allToolbarButtons[i];
-    //         $(toolbarButton).prop('disabled', false);
-    //
-    //         const index = disabledToolButtons.indexOf($(toolbarButton).attr('id'));
-    //         if (index !== -1) {
-    //             $(toolbarButton).prop('disabled', true);
-    //         }
-    //     }
-    // }
+    // Set disabled/enabled tool buttons that are set in toolManager
+    const states = OHIF.viewerbase.toolManager.getToolDefaultStates();
+    const disabledToolButtons = states.disabledToolButtons;
+    const allToolbarButtons = $('#toolbar').find('button');
+    if (disabledToolButtons && disabledToolButtons.length > 0) {
+        for (let i = 0; i < allToolbarButtons.length; i++) {
+            const toolbarButton = allToolbarButtons[i];
+            $(toolbarButton).prop('disabled', false);
+
+            const index = disabledToolButtons.indexOf($(toolbarButton).attr('id'));
+            if (index !== -1) {
+                $(toolbarButton).prop('disabled', true);
+            }
+        }
+    }
 });
+
+
+  Template.toolbarSection.events({
+    'click .Menubtn': function (e) {
+      var toolsOff = 0;
+      e.preventDefault();
+      if (!$(".toolbarSectionTools").hasClass("close")) {
+        $(".toolbarSectionTools").addClass("close");
+        $(".toolbarSectionTools").fadeOut( "slow" );
+        $(".show_tools").attr( "src","/images/no_show_tools.png" );
+        $(".tools_txt").css( "color","#91b9cd" );
+      }
+      else {
+        $(".toolbarSectionTools").removeClass("close");
+        $(".toolbarSectionTools").fadeIn( "slow" );
+        $(".show_tools").attr( "src","/images/show_tools.png" );
+        $(".tools_txt").css( "color","#20a5d6" );
+      }
+    }
+  });
+
+
+  Session.set("resize", null);
+
+  Meteor.startup(function () {
+    window.addEventListener('resize', function(){
+      Session.set("resize", new Date());
+    });
+  });
+
+  Template.toolbarSection.resized = function(){
+    var width = $(window).width();
+    var height = $(window).height();
+    return Session.get('resize');
+  };

@@ -1,0 +1,60 @@
+{
+  "servers": {
+    "dicomWeb": [
+      {
+        "name": "DCM4CHEE",
+        "wadoUriRoot": "http://172.17.0.1:9782/wado",
+        "qidoRoot": "http://172.17.0.1:9782/wado",
+        "wadoRoot": "http://172.17.0.1:9782/wado",
+        "qidoSupportsIncludeField": false,
+        "imageRendering": "wadouri",
+        "requestOptions": {
+          "auth": "admin:admin",
+          "logRequests": false,
+          "logResponses": false,
+          "logTiming": false
+        }
+    }],
+    "dimse": [{
+      "name": "DCM4CHEE_DIMSE",
+      "wadoUriRoot": "http://172.17.0.1:9782/wado",
+      "requestOptions": {
+        "auth": "admin:admin",
+        "logRequests": false,
+        "logResponses": false,
+        "logTiming": false
+      },
+      "peers": [
+        {
+          "host": "172.17.0.1",
+          "port": 11112,
+          "aeTitle": "EDX-PACS",
+          "default": true,
+          "supportsInstanceRetrievalByStudyUid": false
+        },
+        {
+          "host": "0.0.0.0",
+          "port": 11112,
+          "aeTitle": "VIEWER",
+          "default": true,
+          "server": true
+        }
+      ]
+    }]
+  },
+  "defaultServiceType": "dimse",
+  "dropCollections": false,
+  "public": {
+    "verifyEmail": false,
+    "ui": {
+        "studyListFunctionsEnabled": false,
+        "leftSidebarOpen": true,
+        "displaySetNavigationLoopOverSeries": true,
+        "displaySetNavigationMultipleViewports": true,
+        "autoPositionMeasurementsTextCallOuts": "TRLB",
+        "displayEchoUltrasoundWorkflow": false,
+        "showStackLoadingProgressBar": true,
+        "cornerstoneRenderer": "canvas"
+    }
+  }
+}
