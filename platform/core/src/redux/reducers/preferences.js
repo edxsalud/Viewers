@@ -6,10 +6,10 @@ const defaultState = {
     4: { description: 'Huesos', window: '2500', level: '480' },
     5: { description: 'Cerebro', window: '80', level: '40' },
     6: { description: 'Abdomen', window: '350', level: '40' },
-    7: { description: '', window: '', level: '' },
-    8: { description: '', window: '', level: '' },
-    9: { description: '', window: '', level: '' },
-    10: { description: '', window: '', level: '' },
+    7: { description: 'Plantilla_1', window: '5', level: '0' },
+    8: { description: 'Plantilla_2', window: '5', level: '0' },
+    9: { description: 'Plantilla_3', window: '5', level: '0' },
+    10: { description: 'Plantilla_4', window: '5', level: '0' },
   },
   generalPreferences: {
     // language: 'en-US'

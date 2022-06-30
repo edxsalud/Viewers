@@ -3,31 +3,33 @@ window.config = {
   routerBasename: '/',
   extensions: [],
   showStudyList: false,
-  filterQueryParam: false,
-  disableServersCache: false,
+  filterQueryParam: true,
+  disableServersCache: true,
   studyPrefetcher: {
     enabled: true,
     order: 'closest',
-    displaySetCount: 3,
+    displaySetCount: 8,
     preventCache: false,
-    prefetchDisplaySetsTimeout: 300,
+    prefetchDisplaySetsTimeout: 320,
     displayProgress: true,
     includeActiveDisplaySet: true,
   },
   servers: {
     dicomWeb: [
       {
-        name: 'Orthanc',
-        wadoUriRoot: `{PROTOCOL}://{ACCOUNT_NAME}.pacs.radiologia.net.co:{PORT_DICOMWEB}/wado`,
-        qidoRoot: `{PROTOCOL}://{ACCOUNT_NAME}.pacs.radiologia.net.co:{PORT_DICOMWEB}/dicom-web`,
-        wadoRoot: `{PROTOCOL}://{ACCOUNT_NAME}.pacs.radiologia.net.co:{PORT_DICOMWEB}/dicom-web`,
-        qidoSupportsIncludeField: false,
+        name: 'pacs',
+        wadoUriRoot: `{PROTOCOL}://{ACCOUNT_NAME}.{SERVER_ADDRESS}:{PORT_DICOMWEB}/wado`,
+        qidoRoot: `{PROTOCOL}://{ACCOUNT_NAME}.{SERVER_ADDRESS}:{PORT_DICOMWEB}/dicom-web`,
+        wadoRoot: `{PROTOCOL}://{ACCOUNT_NAME}.{SERVER_ADDRESS}:{PORT_DICOMWEB}/dicom-web`,
+        qidoSupportsIncludeField: true,
         imageRendering: 'wadors',
         thumbnailRendering: 'wadors',
+        enableStudyLazyLoad: true,
+        supportsFuzzyMatching: true,
 	      requestOptions: {
-        // undefined to use JWT + Bearer auth
+        // undefined
           auth: (_options) => {
-            return "Basic YWRtaW5AZWR4LmNvbS5jbzpEMWMwbW4xbmo0JDRkbTFuJA=="
+            return `Basic {AUTH_PRODUCTION}`
           }
         },
       },
