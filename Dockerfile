@@ -60,6 +60,7 @@ RUN npm run build; exit 0
 # Stage 2: Bundle the built application into a Docker container
 # which runs Nginx using Alpine Linux
 
+
 EXPOSE 3000:3000
 
 ENTRYPOINT ["bash"]
