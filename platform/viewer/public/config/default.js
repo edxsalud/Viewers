@@ -4,7 +4,7 @@ window.config = {
   extensions: [],
   showStudyList: false,
   filterQueryParam: true,
-  disableServersCache: true,
+  disableServersCache: false,
   studyPrefetcher: {
     enabled: true,
     order: 'closest',
